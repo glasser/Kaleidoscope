@@ -2,6 +2,11 @@
 // Copyright 2016-2022 Keyboardio, inc. <jesse@keyboard.io>
 // See "LICENSE" for license details
 
+// HOW TO ACTUALLY FLASH:
+// VERBOSE=1 make compile
+// Find the Model100-latest.bin that is produced in some tmp place
+// Load it via Chrysalis's firmware update (which saves and restores EEPROM)
+
 /**
  * These #include directives pull in the Kaleidoscope firmware core,
  * as well as the Kaleidoscope plugins we use in the Model 100's firmware
@@ -99,6 +104,9 @@
 
 // Support for the GeminiPR Stenography protocol
 #include "Kaleidoscope-Steno.h"
+
+// Support for changing colors when modifiers are on
+#include "Kaleidoscope-LED-ActiveModColor.h"
 
 /** This 'enum' is a list of all the macros used by the Model 100's firmware
   * The names aren't particularly important. What is important is that each
@@ -552,7 +560,7 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
   // The rainbow effect changes the color of all of the keyboard's keys at the same time
   // running through all the colors of the rainbow.
-  LEDRainbowEffect,
+  // LEDRainbowEffect,
 
   // The rainbow wave effect lights up your keyboard with all the colors of a rainbow
   // and slowly moves the rainbow across your keyboard
@@ -560,26 +568,26 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
   // The chase effect follows the adventure of a blue pixel which chases a red pixel across
   // your keyboard. Spoiler: the blue pixel never catches the red pixel
-  LEDChaseEffect,
+  // LEDChaseEffect,
 
   // These static effects turn your keyboard's LEDs a variety of colors
-  solidRed,
-  solidOrange,
-  solidYellow,
-  solidGreen,
+  // solidRed,
+  // solidOrange,
+  // solidYellow,
+  // solidGreen,
   solidBlue,
-  solidIndigo,
-  solidViolet,
+  // solidIndigo,
+  // solidViolet,
 
   // The breathe effect slowly pulses all of the LEDs on your keyboard
-  LEDBreatheEffect,
+  // LEDBreatheEffect,
 
   // The AlphaSquare effect prints each character you type, using your
   // keyboard's LEDs as a display
-  AlphaSquareEffect,
+  // AlphaSquareEffect,
 
   // The stalker effect lights up the keys you've pressed recently
-  StalkerEffect,
+  // StalkerEffect,
 
   // The LED Palette Theme plugin provides a shared palette for other plugins,
   // like Colormap below
@@ -599,6 +607,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // Turns LEDs off after a configurable amount of idle time.
   IdleLEDs,
   PersistentIdleLEDs,
+
+  // Show which mods are active.
+  ActiveModColorEffect,
 
   // ----------------------------------------------------------------------
   // Miscellaneous plugins
@@ -621,6 +632,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
 void setup() {
   // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
+
+  // Blue = sticky.
+  ActiveModColorEffect.setStickyColor(CRGB(0, 70, 160));
 
   // Set the hue of the boot greeting effect to something that will result in a
   // nice green color.
